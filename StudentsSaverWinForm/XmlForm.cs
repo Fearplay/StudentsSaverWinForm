@@ -19,7 +19,7 @@ namespace StudentsSaverWinForm
 
         Person person;
         String nazev;
-        List<String> oborList; //proměnná pro Stringovskej list
+        List<String> oborList; 
 
         private Form CallingForm = null;
         public XmlForm(Form callingForm) : this()
@@ -31,8 +31,8 @@ namespace StudentsSaverWinForm
         {
             InitializeComponent();
             person = new Person();
-            oborList = new List<String>(); //inicializování proměnný
-            oborList.Add("INFO"); //přidávání možností pro Obor do našeho listu
+            oborList = new List<String>(); 
+            oborList.Add("INFO"); 
             oborList.Add("info");
             oborList.Add("Informatika");
             oborList.Add("INFORMATIKA");
@@ -41,107 +41,106 @@ namespace StudentsSaverWinForm
             oborList.Add("Systemove inzenyrstvi");
             oborList.Add("SI");
             oborList.Add("si");
-            StartPosition = FormStartPosition.CenterScreen; //Zařídí aby se okno načetlo uprostřed
-
+            StartPosition = FormStartPosition.CenterScreen;
 
 
         }
 
-        private void saveFile() //metoda pro uložení souboru
+        private void saveFile() 
         {
 
-            XDocument xDocument = XDocument.Load($"{nazev}.xml"); //načte dokument s naším názvem
-            XElement root = xDocument.Element("Škola"); //vytvoří se root, který je nejvyšší s názvem škola a do toho rooto se budou ukládat naše ostatní elementy, které vytvoříme
-            IEnumerable<XElement> rows = root.Descendants("Student"); //do proměnné rows uložíme potomky pod naším rootem s názvem Student
-            XElement firstRow = rows.First(); //do firstRow se uloží první řádek
+            XDocument xDocument = XDocument.Load($"{nazev}.xml"); 
+            XElement root = xDocument.Element("Škola"); 
+            IEnumerable<XElement> rows = root.Descendants("Student"); 
+            XElement firstRow = rows.First(); 
 
 
-            firstRow.AddBeforeSelf( //do prvního řádku budeme ukládat vždy to první a to starší půjde pod to novější
-           new XElement("Student",//nový element s názvem potomka
-           new XElement("Jméno", person.Name), //nový element String, ve kterým se objeví námi vypsané jméno
-           new XElement("Příjmení", person.Prijmeni), // --||-- (jen místo jména příjmení atd..)
+            firstRow.AddBeforeSelf( 
+           new XElement("Student",
+           new XElement("Jméno", person.Name), 
+           new XElement("Příjmení", person.Prijmeni), 
            new XElement("Věk", "" + person.Vek),
            new XElement("Obor", person.Obor)));
-            xDocument.Save($"{nazev}.xml"); //document se uloží s naším názvem
+            xDocument.Save($"{nazev}.xml"); 
         }
 
-        private void createFileInCreate() //metoda pro vytvoření nového xml souboru
+        private void createFileInCreate()
         {
-            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings(); //uložíme XmlWriterSettings, ve kterým můžeme upravovat preference
-            xmlWriterSettings.Indent = true; //odrážky se nastaví na true, takže v souboru budou odrážky
-            xmlWriterSettings.NewLineOnAttributes = true; //Atribut bude na novém řádku
-            using (XmlWriter xmlWriter = XmlWriter.Create($"{nazev}.xml", xmlWriterSettings)) //vytvoříme nový xml soubour s naším názvem a s našema preferencema
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings(); 
+            xmlWriterSettings.Indent = true; 
+            xmlWriterSettings.NewLineOnAttributes = true; 
+            using (XmlWriter xmlWriter = XmlWriter.Create($"{nazev}.xml", xmlWriterSettings)) 
             {
-                xmlWriter.WriteStartDocument();//začnememe psát Document '<?xml version="1.0" encoding="UTF-8"?>'
-                xmlWriter.WriteStartElement("Škola"); //Vytvoříme začátečnický element s názvem Škola
-                xmlWriter.WriteStartElement("Student"); //potomek s názvem Student
-                xmlWriter.WriteElementString("Jméno", person.Name); //začátečnický Element se jménem, který jsme zvolili
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("Škola"); 
+                xmlWriter.WriteStartElement("Student"); 
+                xmlWriter.WriteElementString("Jméno", person.Name); 
                 xmlWriter.WriteElementString("Příjmení", person.Prijmeni);
                 xmlWriter.WriteElementString("Věk", "" + person.Vek);
                 xmlWriter.WriteElementString("Obor", person.Obor);
-                xmlWriter.WriteEndElement();//vypíšeme do dokumentu </Student>
-                xmlWriter.WriteEndElement();//vypíšeme do dokumentu </Škola>
-                xmlWriter.WriteEndDocument();//Ukončujeme náš dokument
-                xmlWriter.Flush();//podobné close je to tu jen pro případ, ale nemusí to tu být
-                xmlWriter.Close();//nejdůležitější musíme uzavřít jinak by se vyhodila chyba
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Flush();
+                xmlWriter.Close();
             }
         }
 
-        private void createFile() //metoda vytvoření souboru
+        private void createFile() 
         {
 
 
-            if (File.Exists($"{nazev}.xml") == false) //pokud neexistuje soubor v naší 'cestě'  (nemusí být false může bát jen '!')
+            if (File.Exists($"{nazev}.xml") == false) 
             {
-                createFileInCreate(); //vytvoří se soubour
+                createFileInCreate(); 
             }
-            else //pokud existuje
+            else 
             {
-                saveFile(); //pouze se soubor uloží takže se jen připísou hodnoty
+                saveFile(); 
             }
 
 
         }
 
-        private void loadFile() // metoda pro načítání souboru
+        private void loadFile()
         {
 
 
 
-            try//blok ve kterým hlídáme naše chyby
+            try
             {
-                nazev = nazevTextBox.Text; // sem vkládáme název souboru pro případ, že uživatel napíše pouze jméno souboru a dá load
-                DataSet ds = new DataSet(); //vytvoříme dataSet
+                nazev = nazevTextBox.Text; 
+                DataSet ds = new DataSet(); 
 
-                ds.ReadXml($"{nazev}.xml"); //do toho přidáme čtení našeho xml souboru
+                ds.ReadXml($"{nazev}.xml"); 
 
-                vysledekView.DataSource = ds.Tables[0];//vypíšeme následně do našeho dataGridView
+                vysledekView.DataSource = ds.Tables[0];
             }
-            catch (Exception) //ohlídá chyby
+            catch (Exception) 
             {
 
-                MessageBox.Show("Soubor nenalezen!"); //pokud bude chyba na straně load vypíše se 'soubor nenalezen!'
+                MessageBox.Show("Soubor nenalezen!"); 
             }
 
         }
 
-        private void createSaveButton_Click(object sender, EventArgs e)//metoda po kliknutí na create/save button
+        private void createSaveButton_Click(object sender, EventArgs e)
         {
 
-            try //blok vyjímky
+            try 
             {
-                person.Name = jmenoTextBox.Text; //ukládáme do person.Name náš text, který vypisujeme do textboxu s jménem
+                person.Name = jmenoTextBox.Text; 
                 person.Prijmeni = prijmeniTextBox.Text;
                 person.Vek = int.Parse(vekTextBox.Text);
                 person.Obor = oborTextBox.Text;
                 nazev = nazevTextBox.Text;
-                if (String.IsNullOrEmpty(jmenoTextBox.Text)) //pokud náš textBox do kterýho píšeme jméno bude prrázdný nebo null ak se vypíše chybová hláška
+                if (String.IsNullOrEmpty(jmenoTextBox.Text)) 
                 {
                     MessageBox.Show("Vyplňte jméno!");
                 }
-                else if (String.IsNullOrEmpty(prijmeniTextBox.Text)) //můžeme napsat klidně person.Prijmeni
+                else if (String.IsNullOrEmpty(prijmeniTextBox.Text)) 
                 {
-                    MessageBox.Show("Vyplňte příjmení!");//vypíše se pokud podmínka bude splněna
+                    MessageBox.Show("Vyplňte příjmení!");
                 }
                 else if (String.IsNullOrEmpty(oborTextBox.Text))
                 {
@@ -151,41 +150,41 @@ namespace StudentsSaverWinForm
                 {
                     MessageBox.Show("Vyplňte název souboru!");
                 }
-                else if (person.Vek < 18 || person.Vek > 100) //pokud věk bude menší než 18 nebo větší než 100 
+                else if (person.Vek < 18 || person.Vek > 100) 
                 {
-                    MessageBox.Show("Věk lze od 18 do 100");//vypíše se chybová hláška
+                    MessageBox.Show("Věk lze od 18 do 100");
                 }
-                else if (!oborList.Contains(person.Obor)) //pokud náš List s oborama neobsahuje to co napíšeme do obor text boxu 
+                else if (!oborList.Contains(person.Obor)) 
                 {
-                    MessageBox.Show("Na výběr je pouze Informatika nebo Systémové inženýrství!");//vypíše se chybová hláška
+                    MessageBox.Show("Na výběr je pouze Informatika nebo Systémové inženýrství!");
                 }
-                else//pokud není jiný problém
+                else
                 {
-                    createFile();//vytvoří se náš soubor
+                    createFile();
                 }
             }
-            catch (Exception)//pokud věk nebude vyplněný vypíše tuto chybovou hlášku
+            catch (Exception)
             {
                 MessageBox.Show("Vyplňte věk!");
             }
         }
 
-        private void loadButton_Click(object sender, EventArgs e) //metoda pro kliknutí na load button
+        private void loadButton_Click(object sender, EventArgs e) 
         {
 
-            loadFile(); //načte se soubor
+            loadFile(); 
         }
-        private void menuButton_Click(object sender, EventArgs e) //metoda pro kliknutí na menu button
+        private void menuButton_Click(object sender, EventArgs e)
         {
-            this.Hide();//schová se tento form
-            Menu menu = new Menu(this);//vytvoří se nová form s názvem Menu
-            menu.ShowDialog();//objeví se menu
-            this.Close();//tato forma se uzavře
+            this.Hide();
+            Menu menu = new Menu(this);
+            menu.ShowDialog();
+            this.Close();
         }
 
-        private void nazevTextBox_KeyPress(object sender, KeyPressEventArgs e) //metoda po té co v našem název text boxu zmáčkneme klávesovou zkratku
+        private void nazevTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = !(char.IsLetter(e.KeyChar) || e.KeyChar == (char)Keys.Back); //pokud naše klávesa není písmeno tak nám to nic nenapíše
+            e.Handled = !(char.IsLetter(e.KeyChar) || e.KeyChar == (char)Keys.Back); 
         }
 
 
@@ -200,7 +199,7 @@ namespace StudentsSaverWinForm
         }
         private void vekTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);//toto nám nedovolí psát nic jiného než čísla
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
 
         private void oborTextBox_KeyPress(object sender, KeyPressEventArgs e)

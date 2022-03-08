@@ -13,16 +13,13 @@ namespace StudentsSaverWinForm
 {
     public partial class TextForm : Form
     {
-        /*
-         * většina komentářů je stejná jak pro TextForm tak i pro XmlForm, a proto všechno nevypisuji znovu
-         * přeci jen programátoři si snaží ulehčit svou práci.
-         */
+      
 
         String nazev;
-        Person person;//vytváříme proměnnou pro třídu Person
+        Person person;
         List<String> oborList;
         private Form CallingForm = null;
-        public TextForm(Form callingForm) : this() //konstruktor pro fungování přehazování forms
+        public TextForm(Form callingForm) : this() 
         {
             this.CallingForm = callingForm;
         }
@@ -40,60 +37,60 @@ namespace StudentsSaverWinForm
             oborList.Add("Systemove inzenyrstvi");
             oborList.Add("SI");
             oborList.Add("si");
-            StartPosition = FormStartPosition.CenterScreen;//Zařídí aby se okno načetlo uprostřed
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void createFileInFile()//metoda pro vytvoření soubor
+        private void createFileInFile()
         {
-            StreamWriter sw = new StreamWriter($"{nazev}.txt"); //vytvoříme náš soubor s txt příponou
-            sw.Write("Jméno: " + person.Name + ", ");//vypíšeme do toho souboru jmén, které jsme zadali
+            StreamWriter sw = new StreamWriter($"{nazev}.txt"); 
+            sw.Write("Jméno: " + person.Name + ", ");
             sw.Write("Příjmení: " + person.Prijmeni + ", ");
             sw.Write("Věk: " + person.Vek + ", ");
             sw.Write("Obor: " + person.Obor + " ");
-            sw.Write("\n"); //odřádkování hodí nás to na nový řádek
-            sw.Close(); //důležité uzavře náš soubor
+            sw.Write("\n"); 
+            sw.Close(); 
         }
-        private void saveTextFile()//metoda pro uložení souboru
+        private void saveTextFile()
         {
-            StreamWriter sw = new StreamWriter($"{nazev}.txt", true);//true značí, že chceme append tedy přidat
-            sw.Write("Jméno: " + person.Name + ", "); //naše jméno
+            StreamWriter sw = new StreamWriter($"{nazev}.txt", true);
+            sw.Write("Jméno: " + person.Name + ", "); 
             sw.Write("Příjmení: " + person.Prijmeni + ", ");
             sw.Write("Věk: " + person.Vek + ", ");
             sw.Write("Obor: " + person.Obor + " ");
             sw.Write("\n");
-            sw.Close();//zase uzavře
+            sw.Close();
         }
-        private void loadTextFile() //metoda pro načítání souboru
+        private void loadTextFile()
         {
-            try//máme ve vyjímce pro případ, že by soubor neexistoval
+            try
             {
                 nazev = nazevTextBox.Text;
-                StreamReader sr = new StreamReader($"{nazev}.txt");//čteme z našeho souboru
-                vysledekTextBox.Text = sr.ReadToEnd();//vypisujeme do našeho text boxu vše co je v sr až do konce
-                sr.Close();//uzavřeme
+                StreamReader sr = new StreamReader($"{nazev}.txt");
+                vysledekTextBox.Text = sr.ReadToEnd();
+                sr.Close();
             }
-            catch (Exception)//odchycení
+            catch (Exception)
             {
-                MessageBox.Show("Soubor neexistuje!"); //vypisování chybové hlášky
+                MessageBox.Show("Soubor neexistuje!"); 
             }
         }
 
-        private void createTextFile() //metoda pro zjištování jestli uložit nebo vytvořit soubor
+        private void createTextFile() 
         {
 
-            if (!File.Exists($"{nazev}.txt"))//pokud soubor s názvem neexistuje
+            if (!File.Exists($"{nazev}.txt"))
             {
-                createFileInFile(); //vytvoříme ho
+                createFileInFile(); 
             }
-            else//pokud existuje
+            else
             {
-                saveTextFile();//uložíme ho
+                saveTextFile();
             }
         }
 
-        private void createButton_Click(object sender, EventArgs e) //metoda pro kliknutí na create/save button
+        private void createButton_Click(object sender, EventArgs e) 
         {
-            try//odchycení výjimky pro vek
+            try
             {
                 person.Name = jmenoTextBox.Text;
                 person.Prijmeni = prijmeniTextBox.Text;
@@ -135,13 +132,13 @@ namespace StudentsSaverWinForm
             }
         }
 
-        private void loadButton_Click(object sender, EventArgs e) //metoda pro load button
+        private void loadButton_Click(object sender, EventArgs e) 
         {
             loadTextFile();
 
 
         }
-        private void menuButton_Click(object sender, EventArgs e)//menu
+        private void menuButton_Click(object sender, EventArgs e)
         {
             this.Hide();
             Menu menu = new Menu(this);

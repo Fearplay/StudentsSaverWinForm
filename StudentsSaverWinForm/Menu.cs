@@ -21,27 +21,27 @@ namespace StudentsSaverWinForm
         public Menu()
         {
             InitializeComponent();
-            StartPosition = FormStartPosition.CenterScreen;//Zařídí aby se okno načetlo uprostřed
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
       
 
-        private void xmlButton_Click(object sender, EventArgs e) //metoda pro kliknutí na xml button
+        private void xmlButton_Click(object sender, EventArgs e) 
         {
-            this.Hide();//menu se skryje
-            XmlForm xmlForm = new XmlForm(this);//vytvoří se xmlForm
-            xmlForm.ShowDialog(); //objeví se xmlForm
-            this.Close();//menu se zavře
+            this.Hide();
+            XmlForm xmlForm = new XmlForm(this);
+            xmlForm.ShowDialog(); 
+            this.Close();
         }
 
         
 
         private void textButton_Click(object sender, EventArgs e)
         {
-            this.Hide();//menu se skryje
-            TextForm textForm = new TextForm(this);//vytvoří se textForm
-            textForm.ShowDialog();//objeví se textForm
-            this.Close();//menu se zavře
+            this.Hide();
+            TextForm textForm = new TextForm(this);
+            textForm.ShowDialog();
+            this.Close();
         }
     }
 }
